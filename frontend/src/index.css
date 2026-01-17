@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 97%;
+    --foreground: 210 11% 8%;
+    --card: 0 0% 100%;
+    --card-foreground: 210 11% 8%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 11% 8%;
+    --primary: 152 66% 27%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 11% 96%;
+    --secondary-foreground: 210 11% 8%;
+    --muted: 210 14% 91%;
+    --muted-foreground: 215 14% 51%;
+    --accent: 210 14% 91%;
+    --accent-foreground: 210 11% 8%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 210 14% 88%;
+    --input: 210 14% 88%;
+    --ring: 152 66% 27%;
+    --radius: 0.5rem;
+
+    --income: 142 71% 45%;
+    --expense: 0 73% 51%;
+    --balance: 216 83% 56%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+}
+
+@layer utilities {
+  .income-color {
+    @apply text-green-600;
+  }
+
+  .expense-color {
+    @apply text-red-600;
+  }
+
+  .balance-color {
+    @apply text-blue-600;
+  }
+}
