@@ -1,11 +1,13 @@
+import { User } from '@prisma/client'
 import { UserModel } from '../models/user.model.js'
 import { prismaClient } from '../../prisma/prisma.js'
 import { LoginInput, RegisterInput } from '../dtos/input/auth.input.js'
 import { comparePassword, hashPassword } from '../utils/hash.js'
 import { signJwt } from '../utils/jwt.js'
+import { AuthOutput } from '../dtos/output/auth.output.js'
 
 export class AuthService {
-  async login(data: LoginInput) {
+  async login(data: LoginInput): Promise<AuthOutput> {
     const existingUser = await prismaClient.user.findUnique({
       where: {
         email: data.email,
@@ -17,7 +19,7 @@ export class AuthService {
     return this.generateTokens(existingUser)
   }
 
-  async register(data: RegisterInput) {
+  async register(data: RegisterInput): Promise<AuthOutput> {
     const existingUser = await prismaClient.user.findUnique({
       where: {
         email: data.email,
@@ -37,8 +39,17 @@ export class AuthService {
     return this.generateTokens(user)
   }
 
-  generateTokens(user: UserModel) {
+  private generateTokens(user: User): AuthOutput {
     const token = signJwt({ id: user.id, email: user.email }, '1d')
-    return { token, user }
+    return {
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      },
+    }
   }
 }

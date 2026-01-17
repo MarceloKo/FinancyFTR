@@ -1,8 +1,9 @@
+import { User } from '@prisma/client'
 import { prismaClient } from '../../prisma/prisma.js'
 import { UpdateUserInput } from '../dtos/input/user.input.js'
 
 export class UserService {
-  async getProfile(userId: string) {
+  async getProfile(userId: string): Promise<User> {
     const user = await prismaClient.user.findUnique({
       where: {
         id: userId,
@@ -14,7 +15,7 @@ export class UserService {
     return user
   }
 
-  async updateProfile(userId: string, data: UpdateUserInput) {
+  async updateProfile(userId: string, data: UpdateUserInput): Promise<User> {
     const user = await prismaClient.user.findUnique({
       where: {
         id: userId,

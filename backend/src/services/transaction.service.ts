@@ -1,8 +1,13 @@
+import { Prisma } from '@prisma/client'
 import { prismaClient } from '../../prisma/prisma.js'
 import { CreateTransactionInput, UpdateTransactionInput } from '../dtos/input/transaction.input.js'
 
+export type TransactionWithCategory = Prisma.TransactionGetPayload<{
+  include: { category: true }
+}>
+
 export class TransactionService {
-  async listTransactions(userId: string) {
+  async listTransactions(userId: string): Promise<TransactionWithCategory[]> {
     return prismaClient.transaction.findMany({
       where: {
         userId,
@@ -16,7 +21,7 @@ export class TransactionService {
     })
   }
 
-  async getTransaction(id: string, userId: string) {
+  async getTransaction(id: string, userId: string): Promise<TransactionWithCategory> {
     const transaction = await prismaClient.transaction.findUnique({
       where: {
         id,
@@ -32,7 +37,7 @@ export class TransactionService {
     return transaction
   }
 
-  async createTransaction(data: CreateTransactionInput, userId: string) {
+  async createTransaction(data: CreateTransactionInput, userId: string): Promise<TransactionWithCategory> {
     if (data.categoryId) {
       const category = await prismaClient.category.findUnique({
         where: {
@@ -59,7 +64,7 @@ export class TransactionService {
     })
   }
 
-  async updateTransaction(id: string, data: UpdateTransactionInput, userId: string) {
+  async updateTransaction(id: string, data: UpdateTransactionInput, userId: string): Promise<TransactionWithCategory> {
     const transaction = await prismaClient.transaction.findUnique({
       where: {
         id,
@@ -97,7 +102,7 @@ export class TransactionService {
     })
   }
 
-  async deleteTransaction(id: string, userId: string) {
+  async deleteTransaction(id: string, userId: string): Promise<boolean> {
     const transaction = await prismaClient.transaction.findUnique({
       where: {
         id,

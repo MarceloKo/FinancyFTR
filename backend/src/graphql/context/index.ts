@@ -19,9 +19,11 @@ export const buildContext = async ({
   if (authHeader?.startsWith('Bearer ')) {
     token = authHeader.substring('Bearer '.length)
     try {
-      const payload = verifyJwt(token) as JwtPayload
+      const payload = verifyJwt(token)
       user = payload.id
-    } catch (error) {}
+    } catch (error) {
+      token = undefined
+    }
   }
   return { user, token, req, res }
 }
