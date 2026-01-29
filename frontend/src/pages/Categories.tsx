@@ -49,7 +49,7 @@ export function Categories() {
   const [color, setColor] = useState('#16a34a')
   const [iconName, setIconName] = useState('utensils')
 
-  const { data, loading, error, refetch } = useQuery(LIST_CATEGORIES)
+  const { data, loading, error, refetch } = useQuery<{ listCategories: Category[] }>(LIST_CATEGORIES)
 
   const [createCategory, { loading: creating }] = useMutation(CREATE_CATEGORY, {
     onCompleted: () => {
@@ -149,7 +149,7 @@ export function Categories() {
     )
   }
 
-  const categories: Category[] = (data as any)?.listCategories || []
+  const categories: Category[] = data?.listCategories || []
 
   return (
     <Layout>

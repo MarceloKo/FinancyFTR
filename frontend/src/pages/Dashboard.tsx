@@ -10,7 +10,7 @@ import { LIST_CATEGORIES } from '@/lib/graphql/queries/categories'
 import { formatCurrency, formatDate, cn } from '@/lib/utils'
 import type { Transaction, Category, PaginatedTransactions } from '@/types'
 
-const iconMap: Record<string, any> = {
+const iconMap: Record<string, React.ElementType> = {
   'briefcase-business': Briefcase,
   'utensils': Utensils,
   'car-front': CarFront,

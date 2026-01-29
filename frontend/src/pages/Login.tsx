@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
+import { User } from '@/types'
 
 export function Login() {
   const navigate = useNavigate()
@@ -20,12 +21,12 @@ export function Login() {
   const [rememberMe, setRememberMe] = useState(false)
 
   const [login, { loading }] = useMutation(LOGIN, {
-    onCompleted: (data: any) => {
+    onCompleted: (data: { login: { user: User; token: string } }) => {
       setAuth(data.login.user, data.login.token)
       toast.success('Login realizado com sucesso!')
       navigate('/')
     },
-    onError: (error: any) => {
+    onError: (error) => {
       toast.error(error.message || 'Erro ao fazer login')
     },
   })
@@ -50,9 +51,9 @@ export function Login() {
       <div className="mb-8 flex items-center gap-3">
         <div className="w-10 h-10 rounded-full bg-[#1f6f43] flex items-center justify-center">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="white"/>
-            <path d="M2 17L12 22L22 17" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M2 12L12 17L22 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="white" />
+            <path d="M2 17L12 22L22 17" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M2 12L12 17L22 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
         <span className="text-2xl font-bold text-[#1f6f43]">FINANCY</span>
