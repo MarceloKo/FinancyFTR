@@ -319,18 +319,19 @@ export function Categories() {
 
             <div>
               <Label className="mb-2 block">Cor</Label>
-              <div className="flex gap-2">
+              <div className="flex gap-1">
                 {COLORS.map((c) => (
                   <button
                     key={c}
                     type="button"
                     className={cn(
-                      'h-10 w-10 rounded-full border-2 transition-all',
-                      color === c ? 'border-[#111827] scale-110' : 'border-transparent'
+                      'flex-1 h-10 rounded-lg flex items-center justify-center p-1 transition-all',
+                      color === c ? 'border border-[#1F6F43] bg-[#F8F9FA]' : 'border border-transparent'
                     )}
-                    style={{ backgroundColor: c }}
                     onClick={() => setColor(c)}
-                  />
+                  >
+                    <div className="w-full h-full rounded" style={{ backgroundColor: c }} />
+                  </button>
                 ))}
               </div>
             </div>
@@ -395,18 +396,19 @@ export function Categories() {
 
             <div>
               <Label className="mb-2 block">Cor</Label>
-              <div className="flex gap-2">
+              <div className="flex gap-1">
                 {COLORS.map((c) => (
                   <button
                     key={c}
                     type="button"
                     className={cn(
-                      'h-10 w-10 rounded-full border-2 transition-all',
-                      color === c ? 'border-[#111827] scale-110' : 'border-transparent'
+                      'flex-1 h-10 rounded-lg flex items-center justify-center p-1 transition-all',
+                      color === c ? 'border border-[#1F6F43] bg-[#F8F9FA]' : 'border border-transparent'
                     )}
-                    style={{ backgroundColor: c }}
                     onClick={() => setColor(c)}
-                  />
+                  >
+                    <div className="w-full h-full rounded" style={{ backgroundColor: c }} />
+                  </button>
                 ))}
               </div>
             </div>

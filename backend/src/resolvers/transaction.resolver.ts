@@ -1,7 +1,9 @@
 import { Arg, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql'
 import { TransactionModel } from '../models/transaction.model.js'
 import { CreateTransactionInput, UpdateTransactionInput } from '../dtos/input/transaction.input.js'
-import { TransactionService, TransactionWithCategory } from '../services/transaction.service.js'
+import { TransactionFilterInput } from '../dtos/input/transaction-filter.input.js'
+import { PaginatedTransactionsOutput } from '../dtos/output/transaction.output.js'
+import { TransactionService, TransactionWithCategory, PaginatedTransactions } from '../services/transaction.service.js'
 import { IsAuth } from '../middlewares/auth.middleware.js'
 import { GqlUser } from '../graphql/decorators/user.decorator.js'
 import { UserModel } from '../models/user.model.js'
@@ -10,12 +12,13 @@ import { UserModel } from '../models/user.model.js'
 export class TransactionResolver {
   private transactionService = new TransactionService()
 
-  @Query(() => [TransactionModel])
+  @Query(() => PaginatedTransactionsOutput)
   @UseMiddleware(IsAuth)
   async listTransactions(
-    @GqlUser() user: UserModel
-  ): Promise<TransactionWithCategory[]> {
-    return this.transactionService.listTransactions(user.id)
+    @GqlUser() user: UserModel,
+    @Arg('filters', () => TransactionFilterInput, { nullable: true }) filters?: TransactionFilterInput
+  ): Promise<PaginatedTransactions> {
+    return this.transactionService.listTransactions(user.id, filters)
   }
 
   @Query(() => TransactionModel)

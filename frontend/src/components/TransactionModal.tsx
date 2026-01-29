@@ -28,8 +28,8 @@ export function TransactionModal({ open, onOpenChange, transaction, onSuccess }:
   const [date, setDate] = useState(new Date().toISOString().split('T')[0])
   const [categoryId, setCategoryId] = useState('')
 
-  const { data: categoriesData } = useQuery(LIST_CATEGORIES)
-  const categories: Category[] = (categoriesData as any)?.listCategories || []
+  const { data: categoriesData } = useQuery<{ listCategories: Category[] }>(LIST_CATEGORIES)
+  const categories: Category[] = categoriesData?.listCategories || []
 
   const [createTransaction, { loading: creating }] = useMutation(CREATE_TRANSACTION, {
     onCompleted: () => {
@@ -120,14 +120,14 @@ export function TransactionModal({ open, onOpenChange, transaction, onSuccess }:
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-5 mt-2">
-          <div className="flex gap-3">
+          <div className="flex gap-3 border-2 rounded-xl p-2">
             <button
               type="button"
               className={cn(
-                'flex-1 h-12 rounded-xl border-2 flex items-center justify-center gap-2 text-sm font-medium transition-all bg-white',
+                'flex-1 h-12 rounded-xl  flex items-center justify-center gap-2 text-sm font-medium transition-all border-2 border-transparent',
                 type === 'expense'
-                  ? 'border-[#dc2626] text-[#dc2626]'
-                  : 'border-[#e5e7eb] text-[#6b7280] hover:border-[#dc2626] hover:text-[#dc2626]'
+                  ? ' border-[#dc2626] text-[#dc2626] bg-white'
+                  : 'text-[#6b7280] hover:border-[#dc2626] hover:text-[#dc2626] hover:border-2'
               )}
               onClick={() => setType('expense')}
             >
@@ -137,10 +137,10 @@ export function TransactionModal({ open, onOpenChange, transaction, onSuccess }:
             <button
               type="button"
               className={cn(
-                'flex-1 h-12 rounded-xl border-2 flex items-center justify-center gap-2 text-sm font-medium transition-all bg-white',
+                'flex-1 h-12 rounded-xl flex items-center justify-center gap-2 text-sm font-medium  border-2 border-transparent ',
                 type === 'income'
-                  ? 'border-[#16a34a] text-[#16a34a]'
-                  : 'border-[#e5e7eb] text-[#6b7280] hover:border-[#16a34a] hover:text-[#16a34a]'
+                  ? 'border-[#16a34a] text-[#16a34a] bg-white'
+                  : ' text-[#6b7280] hover:border-[#16a34a] hover:text-[#16a34a] '
               )}
               onClick={() => setType('income')}
             >

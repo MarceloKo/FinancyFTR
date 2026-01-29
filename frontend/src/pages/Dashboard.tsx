@@ -8,7 +8,7 @@ import { TransactionModal } from '@/components/TransactionModal'
 import { LIST_TRANSACTIONS } from '@/lib/graphql/queries/transactions'
 import { LIST_CATEGORIES } from '@/lib/graphql/queries/categories'
 import { formatCurrency, formatDate, cn } from '@/lib/utils'
-import type { Transaction, Category } from '@/types'
+import type { Transaction, Category, PaginatedTransactions } from '@/types'
 
 const iconMap: Record<string, any> = {
   'briefcase-business': Briefcase,
@@ -46,8 +46,9 @@ export function Dashboard() {
     )
   }
 
-  const transactions: Transaction[] = (transactionsData as any)?.listTransactions || []
-  const categories: Category[] = (categoriesData as any)?.listCategories || []
+  const paginatedData = (transactionsData as { listTransactions: PaginatedTransactions } | undefined)?.listTransactions
+  const transactions: Transaction[] = paginatedData?.transactions || []
+  const categories: Category[] = (categoriesData as { listCategories: Category[] } | undefined)?.listCategories || []
 
   const currentMonth = new Date().getMonth()
   const currentYear = new Date().getFullYear()

@@ -2,6 +2,7 @@ import { ApolloClient, InMemoryCache, HttpLink, from, ApolloLink } from '@apollo
 import { setContext } from '@apollo/client/link/context'
 import { onError } from '@apollo/client/link/error'
 import { useAuthStore } from '@/stores/auth'
+import { GraphQLError } from 'graphql'
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000/graphql'
 
@@ -24,7 +25,7 @@ const errorLink = onError((errorResponse) => {
   const { graphQLErrors, networkError } = errorResponse as any
 
   if (graphQLErrors) {
-    graphQLErrors.forEach(({ message, locations, path }: any) => {
+    graphQLErrors.forEach(({ message, locations, path }: GraphQLError) => {
       console.error(
         `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
       )

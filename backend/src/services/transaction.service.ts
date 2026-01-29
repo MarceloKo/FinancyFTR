@@ -1,24 +1,82 @@
 import { Prisma } from '@prisma/client'
 import { prismaClient } from '../../prisma/prisma.js'
 import { CreateTransactionInput, UpdateTransactionInput } from '../dtos/input/transaction.input.js'
+import { TransactionFilterInput } from '../dtos/input/transaction-filter.input.js'
 
 export type TransactionWithCategory = Prisma.TransactionGetPayload<{
   include: { category: true }
 }>
 
+export interface PaginatedTransactions {
+  transactions: TransactionWithCategory[]
+  total: number
+  page: number
+  limit: number
+  totalPages: number
+}
+
 export class TransactionService {
-  async listTransactions(userId: string): Promise<TransactionWithCategory[]> {
-    return prismaClient.transaction.findMany({
-      where: {
-        userId,
-      },
-      include: {
-        category: true,
-      },
-      orderBy: {
-        date: 'desc',
-      },
-    })
+  async listTransactions(userId: string, filters?: TransactionFilterInput): Promise<PaginatedTransactions> {
+    const page = filters?.page ?? 1
+    const limit = filters?.limit ?? 10
+    const skip = (page - 1) * limit
+
+    const where: Prisma.TransactionWhereInput = {
+      userId,
+    }
+
+    if (filters?.search) {
+      where.title = {
+        contains: filters.search,
+      }
+    }
+
+    if (filters?.type) {
+      where.type = filters.type
+    }
+
+    if (filters?.categoryId) {
+      where.categoryId = filters.categoryId
+    }
+
+    if (filters?.month && filters?.year) {
+      const startDate = new Date(filters.year, filters.month - 1, 1)
+      const endDate = new Date(filters.year, filters.month, 0, 23, 59, 59, 999)
+      where.date = {
+        gte: startDate,
+        lte: endDate,
+      }
+    } else if (filters?.year) {
+      const startDate = new Date(filters.year, 0, 1)
+      const endDate = new Date(filters.year, 11, 31, 23, 59, 59, 999)
+      where.date = {
+        gte: startDate,
+        lte: endDate,
+      }
+    }
+
+    const [transactions, total] = await Promise.all([
+      prismaClient.transaction.findMany({
+        where,
+        include: {
+          category: true,
+        },
+        orderBy: {
+          date: 'desc',
+        },
+        skip,
+        take: limit,
+      }),
+      prismaClient.transaction.count({ where }),
+    ])
+
+    return {
+      transactions,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    }
   }
 
   async getTransaction(id: string, userId: string): Promise<TransactionWithCategory> {

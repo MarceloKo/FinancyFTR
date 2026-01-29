@@ -1,21 +1,27 @@
 import { gql } from '@apollo/client'
 
 export const LIST_TRANSACTIONS = gql`
-  query ListTransactions {
-    listTransactions {
-      id
-      title
-      amount
-      type
-      date
-      categoryId
-      category {
+  query ListTransactions($filters: TransactionFilterInput) {
+    listTransactions(filters: $filters) {
+      transactions {
         id
-        name
-        color
+        title
+        amount
+        type
+        date
+        categoryId
+        category {
+          id
+          name
+          color
+        }
+        createdAt
+        updatedAt
       }
-      createdAt
-      updatedAt
+      total
+      page
+      limit
+      totalPages
     }
   }
 `

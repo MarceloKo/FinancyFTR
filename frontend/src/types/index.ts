@@ -39,3 +39,21 @@ export interface TransactionSummary {
   totalExpense: number
   balance: number
 }
+
+export interface PaginatedTransactions {
+  transactions: Transaction[]
+  total: number
+  page: number
+  limit: number
+  totalPages: number
+}
+
+export interface TransactionFilterInput {
+  search?: string
+  type?: 'income' | 'expense'
+  categoryId?: string
+  month?: number
+  year?: number
+  page?: number
+  limit?: number
+}
